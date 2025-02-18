@@ -16,4 +16,6 @@
 
 （3）我代码中的Mysql配置是：数据库-szrmb，表1-identity，表2-transactions。
 
-identity数据类型为：images/identity.png
+identity数据类型为：![图片描述](images/identity.png)
+
+transactions数据类型为: ![图片描述](images/transactions.png)
