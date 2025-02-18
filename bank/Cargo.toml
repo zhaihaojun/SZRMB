@@ -1,0 +1,14 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+eframe = "0.19"  # 或者根据您的实际需求选择版本
+egui = "0.19"    # 或者根据您的实际需求选择版本
+tokio = { version = "1", features = ["full"] }  # 启用tokio所有的功能（包括异步IO、TCP、Mutex等）
+sqlx = { version = "0.8", features = ["mysql", "runtime-tokio-rustls"] }
+sqlx-macros = "0.8"
+syn = { version = "1.0", features = ["parsing"] }
+quote = "1.0"
+dotenv = "0.15"
