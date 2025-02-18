@@ -15,4 +15,5 @@
 （2）将bank和regulator中的Mysql数据库配置修改为本地配置。
 
 （3）我代码中的Mysql配置是：数据库-szrmb，表1-identity，表2-transactions。
-identity数据类型为：
+
+identity数据类型为：images/identity.png
