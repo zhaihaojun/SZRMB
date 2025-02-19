@@ -28,7 +28,7 @@ impl App {
 #[tokio::main]
 async fn main() {
     let app = Arc::new(App::new());
-    let (tx, mut rx): (mpsc::Sender<i32>, mpsc::Receiver<i32>) = mpsc::channel(32);
+    let (tx, rx): (mpsc::Sender<i32>, mpsc::Receiver<i32>) = mpsc::channel(32);
 
     // Start TCP listener in a separate task
     let app_clone = Arc::clone(&app);
@@ -55,7 +55,7 @@ async fn main() {
     // Start GUI
     let options = eframe::NativeOptions::default();
     eframe::run_native(
-        "Receiver App",
+        "Balance App",
         options,
         Box::new(|_cc| Box::new(MyEguiApp::new(app, rx))),
     );
@@ -74,14 +74,14 @@ impl MyEguiApp {
 
 impl eframe::App for MyEguiApp {
     fn update(&mut self, ctx: &Context, _frame: &mut eframe::Frame) {
-        // Check the receiver for new balance updates
+        // 尝试接收消息并更新余额
         if let Ok(amount) = self.rx.try_recv() {
             self.app.update_balance(amount);
         }
 
-        // Draw the UI
+        // 绘制 UI
         CentralPanel::default().show(ctx, |ui| {
-            ui.heading("Receiver");
+            ui.heading("Balance App");
             ui.label(format!("Balance: {}", self.app.get_balance()));
         });
     }

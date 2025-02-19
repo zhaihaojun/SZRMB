@@ -4,9 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-egui = "0.21"
-eframe = "0.21"
-tokio = { version = "1", features = ["full"] }
-
-
-
+eframe = "0.19"  # 或者根据您的实际需求选择版本
+tokio = { version = "1", features = ["full"] }  # 启用tokio所有的功能（包括异步IO、TCP、Mutex等）
