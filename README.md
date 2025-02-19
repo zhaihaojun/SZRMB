@@ -19,3 +19,15 @@
 identity数据类型为：![图片描述](images/identity.png)
 
 transactions数据类型为: ![图片描述](images/transactions.png)
+
+3. 运行示例。
+
+   （1）打开项目，界面如下：![图片描述](images/界面.png)
+
+   （2）配置tcp地址，配置结果如下：![图片描述](images/配置tcp地址.png)
+
+   （3）交易发起方A发起交易，上报银行，监管方指定门限签名参与方A和B：![图片描述](images/监管.png)
+
+   （4）A和B发起门限签名，并上报银行：![图片描述](images/门限签名.png)
+
+   （5）A、B、C和receiver的余额发生变化。
