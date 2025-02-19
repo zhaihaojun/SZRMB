@@ -70,7 +70,7 @@
 
    该部分主要发生在usera点击start按钮后所发生的事件，只要修改start所绑定的事件处理函数即可。
 
-   理应的做法：usera点击start按钮，usera和userb多轮交互(调用gg_2018中的函数)以生成门限签名，然后将签名交给usera，usera将(message,sig)交给银行。
+   理应的做法：usera点击start按钮，usera和userb多轮交互(调用gg_2018中的函数)以生成门限签名，其中包括usera软件和usera硬件的交互、usera软件和userb软件的交互，然后将签名交给usera，usera将(message,sig)交给银行。
 
    现在的做法是：usera点击start按钮，usera将"success,amout"交给银行。
 
