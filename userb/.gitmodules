@@ -1,0 +1,3 @@
+[submodule "SZRMB"]
+	path = SZRMB
+	url = https://github.com/zhaihaojun/SZRMB.git

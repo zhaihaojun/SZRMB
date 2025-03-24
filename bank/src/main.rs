@@ -62,10 +62,21 @@ impl MyApp {
                             socket.write_all(result.as_bytes()).await.unwrap();
                         }
                     } else if msg.starts_with("success,") {
+                        let parts: Vec<&str> = msg.split(';').collect();
                         if let Some(pool) = &db_pool {
-                            let amount_str = msg.trim_start_matches("success,");
-                            if let Ok(amount) = amount_str.parse::<f64>() {
+                            // let amount_str = msg.trim_start_matches("success,");
+                            if let Ok(amount) = parts[1].parse::<f64>() {
                                 MyApp::handle_success(pool, amount).await;
+                                let message = format!("tx,{}",amount);
+                                if let Err(e) = MyApp::send_to_regulator("127.0.0.1".to_string(), "8083".to_string(), message.clone()).await {
+                                    eprintln!("Failed to send success message to 127.0.0.1:8083: {}", e);
+                                }
+                                if let Err(e) = MyApp::send_to_regulator("127.0.0.1".to_string(), "8084".to_string(), message.clone()).await {
+                                    eprintln!("Failed to send success message to 127.0.0.1:8084: {}", e);
+                                }
+                                if let Err(e) = MyApp::send_to_regulator("127.0.0.1".to_string(), "8085".to_string(), message.clone()).await {
+                                    eprintln!("Failed to send success message to 127.0.0.1:8085: {}", e);
+                                }
                             }
                         }
                     } else if msg.trim() == "fail" {
@@ -181,7 +192,7 @@ impl MyApp {
 impl App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("TCP Server");
+            ui.heading("Bank");
 
             // Bank IP and Port inputs with Start Listen button
             ui.horizontal(|ui| {
@@ -252,5 +263,5 @@ async fn main() {
         drag_and_drop_support: true,
         ..Default::default()
     };
-    eframe::run_native("Server", options, Box::new(|_cc| Box::new(app)));
+    eframe::run_native("Bank", options, Box::new(|_cc| Box::new(app)));
 }

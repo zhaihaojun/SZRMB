@@ -1,6 +1,0 @@
-phase1-broadcast the commitments: commitment=SignBroadcastPhase1 { com: 44362779131134231265596706893350827821593078037709586035131840523222639370963 }
-phase2-mta protocol: delta_i=Secp256k1Scalar { purpose: "add", fe: Zeroizing(Some(SK(SecretKey(38966c38bd1d400f64e4372f74310ab507ea1b838889860373c4f192e3bd9907)))) }, sigma_i=Secp256k1Scalar { purpose: "add", fe: Zeroizing(Some(SK(SecretKey(3d3bbd3b76d9eb14fbede45897f9b362e067ee9fc6ed0943b0b92d41e797e130)))) }
-phase3-reconstruct_delta: delta_inv=Secp256k1Scalar { purpose: "invert", fe: Zeroizing(Some(SK(SecretKey(0897e293e13928f5bd8154db120ac7777765319fee3300bcda25d24d592b26a5)))) }
-phase4-gamma_i decommit: R=Secp256k1Point { purpose: "mul_assign", ge: Some(PK(PublicKey(f8457f9e9764ff81bea846cc211d678643b8a3560254d5acd5fbc8cd4eb151dd0e748fb2fb305816fded4c836e7c1170cbfd34449061592d830a6f92158ccb78))) }
-phase5-compute s_i: s_i=Secp256k1Scalar { purpose: "add", fe: Zeroizing(Some(SK(SecretKey(f336abff5377300124efae69b14f93cbea6d18c41d114f560882587205f6b10e)))) }
-sig: sig=SignatureRecid { r: Secp256k1Scalar { purpose: "from_bigint", fe: Zeroizing(Some(SK(SecretKey(dd51b14ecdc8fbd5acd5540256a3b84386671d21cc46a8be81ff64979e7f45f8)))) }, s: Secp256k1Scalar { purpose: "add", fe: Zeroizing(Some(SK(SecretKey(644b0f3f09664846c90f940fb5dc1c4455338a9244e89633c75e34f2e1c00186)))) }, recid: 0 }

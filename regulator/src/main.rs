@@ -20,6 +20,8 @@ struct App {
     participant1: String,
     participant2: String,
     pool: Option<Pool<MySql>>,
+    query_id: String, // 新增字段，用于存储输入的 ID
+    query_result: Arc<Mutex<String>>, // 新增字段，用于存储查询结果
 }
 
 impl Default for App {
@@ -38,6 +40,8 @@ impl Default for App {
             participant1: String::new(),
             participant2: String::new(),
             pool: None,
+            query_id: String::new(), // 初始化新增字段
+            query_result: Arc::new(Mutex::new(String::new())), // 初始化查询结果
         }
     }
 }
@@ -162,9 +166,46 @@ impl eframe::App for App {
                 }
             }
 
-            // Status message
+            // 新增的输入框和查询按钮
             ui.separator();
-            ui.label(&self.status);
+            ui.horizontal(|ui| {
+                ui.label("Query ID:");
+                ui.add(egui::TextEdit::singleline(&mut self.query_id).desired_width(100.0));
+                if ui.button("Query").clicked() {
+                    if self.query_id.is_empty() {
+                        self.status = String::from("Please provide an ID.");
+                    } else {
+                        let query_id = self.query_id.clone();
+                        let pool = self.pool.clone();
+                        let query_result = Arc::clone(&self.query_result);
+
+                        tokio::spawn(async move {
+                            dotenv().ok(); // Load the environment variables from .env file
+                            let database_url = env::var("DATABASE_URL").expect("DATABASE_URL not set in .env");
+                        
+                            let pool = Pool::<MySql>::connect(&database_url).await.unwrap();
+
+                            if let Ok(id) = query_id.parse::<i32>() {
+                                match update_transactions_and_display(&pool, id).await {
+                                    Ok(result) => {
+                                        let mut query_result = query_result.lock().unwrap();
+                                        *query_result = result;
+                                    }
+                                    Err(e) => {
+                                        let mut query_result = query_result.lock().unwrap();
+                                        *query_result = format!("Error: {}", e);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+            ui.separator();
+            ui.label("Query Result:");
+            let query_result = self.query_result.lock().unwrap();
+            ui.label(&*query_result);
         });
     }
 }
@@ -263,6 +304,30 @@ async fn insert_into_identity(
         .unwrap();
 
     println!("Inserted into identity table: {}, {}", participant1, participant2);
+}
+
+// Function to update transactions and display the result
+async fn update_transactions_and_display(pool: &Pool<MySql>, id: i32) -> Result<String, Box<dyn std::error::Error>> {
+    // 更新 idenity 表中的 amount 值
+    let update_query = "UPDATE identity t
+                        JOIN transactions i ON t.id = i.id
+                        SET t.amount = i.amount";
+    sqlx::query(update_query)
+        .bind(id)
+        .execute(pool)
+        .await?;
+
+    // 查询 identity 表中对应 id 的行
+    let select_query = "SELECT * FROM identity WHERE id = ?";
+    let row = sqlx::query_as::<_, (i32, String, String, i32, String)>(select_query)
+        .bind(id)
+        .fetch_one(pool)
+        .await?;
+
+    // 将查询结果格式化为字符串
+    let result = format!("ID: {}, Participant1: {}, Participant2: {}, Amount: {}, Receiver:{}", row.0, row.1, row.2, row.3, row.4);
+
+    Ok(result)
 }
 
 #[tokio::main] // Use tokio::main to create a runtime

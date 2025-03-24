@@ -17,7 +17,7 @@ impl App {
 
     fn update_balance(&self, amount: i32) {
         let mut balance = self.balance.lock().unwrap();
-        *balance -= amount;
+        *balance += amount;
     }
 
     fn get_balance(&self) -> i32 {
@@ -55,7 +55,7 @@ async fn main() {
     // Start GUI
     let options = eframe::NativeOptions::default();
     eframe::run_native(
-        "Balance App",
+        "Receiver: D",
         options,
         Box::new(|_cc| Box::new(MyEguiApp::new(app, rx))),
     );
@@ -81,7 +81,7 @@ impl eframe::App for MyEguiApp {
 
         // 绘制 UI
         CentralPanel::default().show(ctx, |ui| {
-            ui.heading("Balance App");
+            ui.heading("Receiver: D");
             ui.label(format!("Balance: {}", self.app.get_balance()));
         });
     }
